@@ -8,6 +8,7 @@ public class NaiveExceptionHandling {
         try {
             ExecutorService exec = Executors.newCachedThreadPool();
             exec.execute(new ExceptionThread());
+            exec.shutdown();
         } catch (RuntimeException e) {
             // это команда НЕ БУДЕТ выполняться!
             System.out.println("Exception has been handled!");
