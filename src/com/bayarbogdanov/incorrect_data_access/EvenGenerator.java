@@ -17,4 +17,5 @@ public class EvenGenerator extends IntGenerator {
     public static void main(String[] args) {
         EvenChecker.test(new EvenGenerator());
     }
+
 }
