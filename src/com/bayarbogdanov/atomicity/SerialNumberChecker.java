@@ -18,8 +18,7 @@ class CircularSet {
     public CircularSet(int size) {
         array = new int[size];
         len = size;
-        // Инициализируем значением, которое не производится
-        // классом SerialNumberGenerator:
+        // init array
         for (int i = 0; i < size; i++) {
             array[i] = -1;
         }
@@ -27,7 +26,7 @@ class CircularSet {
 
     public synchronized void add(int i) {
         array[index] = i;
-        // "Перенос" индекса с перезаписью старых элементов:
+        // Перенос индекса с перезаписью старых элементов:
         index = ++index % len;
     }
 
@@ -44,16 +43,14 @@ class CircularSet {
 public class SerialNumberChecker {
     private static final int SIZE = 10;
     private static CircularSet serials = new CircularSet(1000);
-    private static ExecutorService exec =
-            Executors.newCachedThreadPool();
+    private static ExecutorService exec = Executors.newCachedThreadPool();
 
     static class SerialChecker implements Runnable {
 
         @Override
         public void run() {
             while (true) {
-                int serial =
-                        SerialNumberGenerator.nextSerialNumber();
+                int serial = SerialNumberGenerator.nextSerialNumber();
                 if (serials.contains(serial)) {
                     System.out.println("Duplicate: " + serial);
                     System.exit(0);
@@ -64,7 +61,7 @@ public class SerialNumberChecker {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        for (int i = 0; i < SIZE; i++) {
+        for(int i = 0; i < SIZE; i++) {
             exec.execute(new SerialChecker());
         }
         // Остановка через n секунд при наличии аргумента:

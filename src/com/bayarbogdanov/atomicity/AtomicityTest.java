@@ -5,27 +5,37 @@ import java.util.concurrent.Executors;
 
 public class AtomicityTest implements Runnable {
 
-    private int i = 2;
+    private volatile int i = 0;
 
+    public synchronized int getValue() {
+        return i;
+    }
+
+    public synchronized void evenIncrement() {
+        i++;
+        i++;
+    }
 
     @Override
     public void run() {
         while (true) {
-            if (i % 2 == 0) {
-                i++;
-                i++;
-                System.out.println(Thread.currentThread().getName() + ": " + i);
-            } else {
-                System.out.println("end");
-                System.exit(0);
-            }
+            evenIncrement();
         }
     }
 
     public static void main(String[] args) {
         ExecutorService exec = Executors.newCachedThreadPool();
+        AtomicityTest at = new AtomicityTest();
         for (int i = 0; i < 10; i++) {
-            exec.execute(new AtomicityTest());
+            exec.execute(at);
+            boolean flag = true;
+            while (flag) {
+                int val = at.getValue();
+                if (val % 2 != 0) {
+                    System.out.println(val);
+                    flag = false;
+                }
+            }
         }
         exec.shutdown();
     }
