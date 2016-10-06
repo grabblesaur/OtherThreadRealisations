@@ -12,10 +12,7 @@ public class Lesson21 {
         exec.submit(new Incrementer(es));
         exec.submit(new Subtracter(es));
 
-        TimeUnit.MILLISECONDS.sleep(100);
+        TimeUnit.MILLISECONDS.sleep(5000);
         exec.shutdownNow();
-
-        System.out.println(es.getX());
-        System.out.println(es.getCounter());
     }
 }

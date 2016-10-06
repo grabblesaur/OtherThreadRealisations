@@ -1,5 +1,7 @@
 package task_relations.lesson21;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Увеличивает x на 1.
  */
@@ -16,8 +18,14 @@ public class Incrementer implements Runnable {
         System.out.println("Incrementer.run: start task");
         try {
             while (!Thread.interrupted()) {
-                es.setFlag(false);
+                System.out.println("Incrementer.run: working");
+                es.waitForSubtracter();
+
                 es.increment();
+                System.out.println("Incrementer.run: " + es.getX());
+                TimeUnit.MILLISECONDS.sleep(200);
+
+                es.setReadyForSubtract();
                 es.waitForSubtracter();
             }
         } catch (InterruptedException e) {
